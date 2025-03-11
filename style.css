@@ -1,0 +1,383 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #FFDEE9 0%, #B5FFFC 100%);
+    color: #333;
+}
+header {
+    background: linear-gradient(90deg, #afdb8a, #a3ecab);
+    color: white;
+    padding: 50px 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+div.scroll-container {
+    background-color: #000000;
+    overflow: auto;
+    white-space: nowrap;
+    padding: 10px;
+}
+
+div.scroll-container img {
+padding: 10px;
+}
+
+/* Navigation bar */
+nav ul {
+    background-color: #333;
+    list-style-type: none;
+    padding: 10px;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+}
+
+nav ul li {
+    margin: 0 10px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+
+/* Section styles */
+section {
+    padding: 20px;
+    text-align: center;
+}
+
+section h2 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.auth-section, .ticket-section {
+    margin-top: 30px;
+}
+
+.auth-section .btn, .ticket-section .btn {
+    text-decoration: none;
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 5px;
+}
+.icon {
+    font-size: 3em;
+    color: #a8adaf;
+    margin-bottom: 20px;
+    transition: transform 0.3s;
+}
+
+/* Footer Styles */
+footer {
+    background-color: #007BFF;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    margin-top: 50px;
+}
+
+.footer-container {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.footer-content p {
+    font-size: 1.2em;
+    margin: 10px 0;
+}
+
+.social-icons {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0 0;
+    display: flex;
+    justify-content: center;
+}
+
+.social-icons li {
+    margin: 0 10px;
+}
+
+.social-icons li a {
+    color: white;
+    font-size: 1.5em;
+    transition: color 0.3s ease;
+}
+
+.social-icons li a:hover {
+    color: #FFD700; /* Changes to gold on hover */
+}
+/* Form Box Styling */
+.form-box {
+    width: 300px;
+    margin: 100px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    text-align: center;
+}
+
+.form-box h2 {
+    margin-bottom: 20px;
+}
+
+.form-box form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-box label {
+    margin-top: 10px;
+    text-align: left;
+}
+
+.form-box input {
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.form-box button {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #008080;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.form-box button:hover {
+    background-color: #005f5f;
+}
+
+.form-box p {
+    margin-top: 10px;
+}
+
+.form-box a {
+    color: #008080;
+    text-decoration: none;
+}
+
+.form-box a:hover {
+    text-decoration: underline;
+}
+
+/* QR Code Styling */
+.qr-code {
+    width: 200px;
+    height: 200px;
+    margin-top: 20px;
+}
+
+
+/* Members Section */
+.members-section {
+    padding: 100px;
+    text-align: center;
+}
+
+.members-list {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.member-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    width: 28%;
+    margin: 20px;
+    padding: 30px;
+    transition: transform 0.3s ease-in-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.member-card h3 {
+    font-size: 1.8em;
+    color: #007BFF;
+    margin-bottom: 15px;
+}
+
+.member-card p {
+    font-size: 1.1em;
+    color: #555;
+}
+@media (max-width: 992px) {
+    .benefits {
+        grid-template-columns: repeat(2, 1fr); /* Show 2 cards per row on medium screens */
+    }
+}
+
+/* Responsive Design for Mobile */
+@media (max-width: 768px) {
+    .benefits {
+        grid-template-columns: 1fr; /* Show 1 card per row on smaller screens */
+    }
+}
+
+/* Memories Section */
+.memories-section {
+    padding: 50px;
+    text-align: center;
+}
+
+#memories-gallery {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+#memories-gallery img {
+    width: 150px;
+    height: 100px;
+    margin: 10px;
+    border: 2px solid #ddd;
+}
+
+.memory-form {
+    margin-top: 30px;
+}
+
+input[type="file"] {
+    margin-top: 10px;
+}
+/* Events Section */
+
+.events-section {
+    padding: 50px;
+    text-align: center;
+}
+
+.events-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 10px 0;
+}
+
+.events-list li {
+    background-color: #f9f9f9;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* Comment Section */
+.comment-section {
+    margin-top: 30px;
+    text-align: center;
+}
+
+#comment-box {
+    width: 80%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #008080;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+/*Awards section*/
+.awards-section {
+    padding: 50px;
+    text-align: center;
+}
+
+.awards-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 10px 0;
+}
+
+.awards-list li {
+    background-color: #f9f9f9;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+}
+/*review Section*/
+.review-section {
+    padding: 50px;
+    text-align: center;
+}
+
+#review-list {
+    margin-top: 20px;
+}
+
+.review-form {
+    margin-top: 30px;
+}
+
+#review-input {
+    width: 80%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #008080;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+/* About Section */
+.about-section {
+    padding: 50px;
+    text-align: center;
+}
+
+.about-section ul {
+    list-style-type: none;
+    padding: 0;
+}
+/* Location Section */
+.location-section {
+    padding: 50px;
+    text-align: center;
+}
+
+.map-link {
+    margin-top: 30px;
+}
+
+.map-button {
+    display: inline-block;
+    padding: 12px 25px;
+    background-color: #008080;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.map-button:hover {
+    background-color: #005f5f;
+}

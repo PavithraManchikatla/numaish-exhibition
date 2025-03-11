@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Registration - Numaish</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Ticket Registration Form Box -->
+    <div class="form-box">
+        <h2>Register for Tickets</h2>
+        <form>
+            <label for="fullName">Full Name</label>
+            <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+            <label for="numTickets">Number of Tickets</label>
+            <input type="number" id="numTickets" name="numTickets" min="1" placeholder="Enter number of tickets" required>
+
+            <h3>Scan QR for Payment</h3>
+            <img src="payment-qr-code.png" alt="Payment QR Code" class="qr-code">
+
+            <button type="submit">Register</button>
+        </form>
+    </div>
+</body>
+</html>
