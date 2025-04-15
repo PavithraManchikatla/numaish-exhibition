@@ -10,8 +10,11 @@
 <header>
           
     <center><a href=""><img src="logo.jpeg" width=200 height=200/></a><br/>
-    <h1>ALL INDIA INDUSTRIAL EXHIBITION-NUMAISH</h1></center></div>
-    
+    <h1>ALL INDIA INDUSTRIAL EXHIBITION-NUMAISH</h1></center>
+
+    <div id="user-info" style="text-align: right; margin-right: 20px; font-weight: bold; color: #007bff;">
+        <!-- User info and logout button will be inserted here -->
+    </div>
 
     </header><br/>
 <body>
@@ -28,6 +31,26 @@
             <li><a href="Route.html">Location</a></li>
         </ul>
     </nav>
+
+    <script>
+        function logout() {
+            localStorage.removeItem('username');
+            window.location.href = 'login.html';
+        }
+
+        function displayUserInfo() {
+            const userInfoDiv = document.getElementById('user-info');
+            const username = localStorage.getItem('username');
+
+            if (username) {
+                userInfoDiv.innerHTML = "Welcome, " + username + " | <a href='#' onclick='logout()'>Logout</a>";
+            } else {
+                userInfoDiv.innerHTML = '';
+            }
+        }
+
+        window.onload = displayUserInfo;
+    </script>
 
     <!-- Review Content -->
     <section class="review-section">

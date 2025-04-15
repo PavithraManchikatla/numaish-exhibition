@@ -10,8 +10,11 @@
 <header>
           
     <center><a href=""><img src="logo.jpeg" width=200 height=200/></a><br/>
-    <h1>ALL INDIA INDUSTRIAL EXHIBITION-NUMAISH</h1></center></div>
-    
+    <h1>ALL INDIA INDUSTRIAL EXHIBITION-NUMAISH</h1></center>
+
+    <div id="user-info" style="text-align: right; margin-right: 20px; font-weight: bold; color: #007bff;">
+        <!-- User info and logout button will be inserted here -->
+    </div>
 
     </header><br/>
 <body>
@@ -28,6 +31,26 @@
             <li><a href="Route.html">Location</a></li>
         </ul>
     </nav>
+
+    <script>
+        function logout() {
+            localStorage.removeItem('username');
+            window.location.href = 'login.html';
+        }
+
+        function displayUserInfo() {
+            const userInfoDiv = document.getElementById('user-info');
+            const username = localStorage.getItem('username');
+
+            if (username) {
+                userInfoDiv.innerHTML = "Welcome, " + username + " | <a href='#' onclick='logout()'>Logout</a>";
+            } else {
+                userInfoDiv.innerHTML = '';
+            }
+        }
+
+        window.onload = displayUserInfo;
+    </script>
 
     <!-- Events Content -->
     <section class="events-section">
@@ -54,8 +77,76 @@
             <h3>Share Your Ideas</h3>
             <textarea id="comment-box" rows="4" placeholder="Leave your idea here..."></textarea>
             <button onclick="submitComment()">Submit</button>
+            <div id="comments-list" style="margin-top: 20px; border-top: 1px solid #ccc; padding-top: 10px;">
+                <!-- Submitted ideas will appear here -->
+            </div>
         </div>
     </section>
+
+    <script>
+        async function loadComments() {
+            const commentsList = document.getElementById('comments-list');
+            commentsList.innerHTML = '';
+            try {
+                const response = await fetch('http://localhost:5002/api/ideas');
+                if (!response.ok) throw new Error('Failed to fetch ideas');
+                const ideas = await response.json();
+                const currentUser = localStorage.getItem('username') || 'Anonymous';
+                ideas.forEach(({ _id, username, text }) => {
+                    const newComment = document.createElement('div');
+                    newComment.style.borderBottom = '1px solid #ddd';
+                    newComment.style.padding = '8px 0';
+                    newComment.style.display = 'flex';
+                    newComment.style.justifyContent = 'space-between';
+                    newComment.style.alignItems = 'center';
+
+                    const commentTextSpan = document.createElement('span');
+                    commentTextSpan.innerHTML = '<strong>' + username + '</strong>: ' + text;
+
+                    newComment.appendChild(commentTextSpan);
+
+                    if (username === currentUser) {
+                        // Delete button removed as per user request
+                    }
+
+                    commentsList.appendChild(newComment);
+                });
+            } catch (err) {
+                alert('Error loading ideas: ' + err.message);
+            }
+        }
+
+        async function submitComment() {
+            const commentBox = document.getElementById('comment-box');
+            const commentText = commentBox.value.trim();
+            if (commentText === '') {
+                alert('Please enter an idea before submitting.');
+                return;
+            }
+
+            const username = localStorage.getItem('username') || 'Anonymous';
+
+            try {
+                const response = await fetch('http://localhost:5002/api/ideas', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, text: commentText }),
+                });
+                if (!response.ok) throw new Error('Failed to submit idea');
+                commentBox.value = '';
+                loadComments();
+            } catch (err) {
+                alert('Error submitting idea: ' + err.message);
+            }
+        }
+
+        window.onload = function() {
+            displayUserInfo();
+            loadComments();
+        };
+    </script>
 
     <!-- Footer -->
     <footer>

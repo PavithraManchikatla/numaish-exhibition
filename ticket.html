@@ -1,30 +1,188 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Ticket Registration - Numaish</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+    <header>
+        <center>
+            <a href=""><img src="logo.jpeg" width="200" height="200" /></a><br />
+            <h1>ALL INDIA INDUSTRIAL EXHIBITION-NUMAISH</h1>
+        </center>
+
+        <div
+            id="user-info"
+            style="text-align: right; margin-right: 20px; font-weight: bold; color: #007bff"
+        >
+            <!-- User info and logout button will be inserted here -->
+        </div>
+    </header>
+    <br />
+
+    <!-- Navigation Bar -->
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="members.html">Members of Society</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="awards.html">Awards</a></li>
+            <li><a href="review.html">Review</a></li>
+            <li><a href="memories.html">Memories</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="Route.html">Location</a></li>
+        </ul>
+    </nav>
+
+    <script>
+        function logout() {
+            localStorage.removeItem("username");
+            window.location.href = "login.html";
+        }
+
+        function displayUserInfo() {
+            const userInfoDiv = document.getElementById("user-info");
+            const username = localStorage.getItem("username");
+
+            if (username) {
+                userInfoDiv.innerHTML =
+                    "Welcome, " + username + " | <a href='#' onclick='logout()'>Logout</a>";
+            } else {
+                userInfoDiv.innerHTML = "";
+            }
+        }
+
+        window.onload = displayUserInfo;
+    </script>
+
     <!-- Ticket Registration Form Box -->
     <div class="form-box">
         <h2>Register for Tickets</h2>
-        <form>
+        <form id="ticketForm">
             <label for="fullName">Full Name</label>
-            <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required>
+            <input
+                type="text"
+                id="fullName"
+                name="fullName"
+                placeholder="Enter your full name"
+                required
+            />
 
             <label for="email">Email</label>
-            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Enter your email"
+                required
+            />
 
             <label for="numTickets">Number of Tickets</label>
-            <input type="number" id="numTickets" name="numTickets" min="1" placeholder="Enter number of tickets" required>
+            <input
+                type="number"
+                id="numTickets"
+                name="numTickets"
+                min="1"
+                placeholder="Enter number of tickets"
+                required
+            />
+            <p>Cost per Ticket: ₹50</p>
+            <p>
+                Total Cost: ₹<span id="totalCost">0</span>
+            </p>
 
             <h3>Scan QR for Payment</h3>
-            <img src="payment-qr-code.png" alt="Payment QR Code" class="qr-code">
+            <img src="payment-qr.jpg" alt="Payment QR Code" class="qr-code" />
 
             <button type="submit">Register</button>
         </form>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        <script>
+            const costPerTicket = 50;
+            const numTicketsInput = document.getElementById("numTickets");
+            const totalCostSpan = document.getElementById("totalCost");
+
+            numTicketsInput.addEventListener("input", () => {
+                const numTickets = parseInt(numTicketsInput.value) || 0;
+                totalCostSpan.textContent = numTickets * costPerTicket;
+            });
+
+            document
+                .getElementById("ticketForm")
+                .addEventListener("submit", async function (event) {
+                    event.preventDefault();
+                    const fullName = document.getElementById("fullName").value;
+                    const email = document.getElementById("email").value;
+                    const numTickets = parseInt(
+                        document.getElementById("numTickets").value
+                    );
+
+                    const amountPaid = numTickets * costPerTicket;
+
+                    // Simulate payment success here or integrate payment gateway
+                    // For now, assume payment is successful
+
+                    try {
+                        const response = await fetch(
+                            "http://localhost:5002/api/tickets",
+                            {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify({
+                                    fullName,
+                                    email,
+                                    numTickets,
+                                    amountPaid,
+                                }),
+                            }
+                        );
+
+                        if (!response.ok) {
+                            throw new Error("Failed to register ticket");
+                        }
+
+                        const data = await response.json();
+
+                        // Generate PDF ticket
+                        const { jsPDF } = window.jspdf;
+                        const doc = new jsPDF();
+
+                        doc.setFontSize(18);
+                        doc.text("Numaish Exhibition Ticket", 20, 20);
+                        doc.setFontSize(12);
+                        doc.text(
+                            `Hello ${fullName}, your ticket has been downloaded successfully.`,
+                            20,
+                            30
+                        );
+                        doc.text(`Name: ${fullName}`, 20, 50);
+                        doc.text(`Email: ${email}`, 20, 60);
+                        doc.text(`Number of Tickets: ${numTickets}`, 20, 70);
+                        doc.text(`Amount Paid: ₹${amountPaid}`, 20, 80);
+                        doc.text(
+                            `Purchase Date: ${new Date().toLocaleString()}`,
+                            20,
+                            90
+                        );
+
+                        doc.save("Numaish_Ticket.pdf");
+
+                        alert(
+                            "Ticket registered successfully! Your ticket PDF has been downloaded."
+                        );
+
+                        // Optionally reset the form
+                        document.getElementById("ticketForm").reset();
+                        totalCostSpan.textContent = "0";
+                    } catch (error) {
+                        alert("Error: " + error.message);
+                    }
+                });
+        </script>
     </div>
 </body>
 </html>
