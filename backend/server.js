@@ -12,7 +12,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// MongoDB Atlas direct connection
+// MongoDB Atlas connection
 mongoose.connect('mongodb+srv://numaish:numaish%401203@cluster0.jiqfhl7.mongodb.net/numaishApp?retryWrites=true&w=majority&appName=Cluster0', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -29,10 +29,12 @@ app.get('/', (req, res) => {
 const authRoutes = require('./routes/auth');
 const ideasRoutes = require('./routes/ideas');
 const ticketsRoutes = require('./routes/tickets');
+const uploadRoute = require('./routes/upload'); 
 
 app.use('/api/auth', authRoutes);
 app.use('/api/ideas', ideasRoutes);
 app.use('/api/tickets', ticketsRoutes);
+app.use('/upload', uploadRoute); // 👈 Add this line
 
 // Start the server
 app.listen(PORT, () => {
