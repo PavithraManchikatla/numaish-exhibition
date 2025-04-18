@@ -8,26 +8,26 @@
     <script src="scripts.js"></script>
 </head>
 <header>
-          
-    <center><a href=""><img src="logo.jpeg" width=200 height=200/></a><br/>
-    <h1>ALL INDIA INDUSTRIAL EXHIBITION-NUMAISH</h1></center>
+    <center>
+        <a href=""><img src="logo.jpeg" width="200" height="200" alt="Logo"></a><br/>
+        <h1>ALL INDIA INDUSTRIAL EXHIBITION-NUMAISH</h1>
+    </center>
 
     <div id="user-info" style="text-align: right; margin-right: 20px; font-weight: bold; color: #007bff;">
         <!-- User info and logout button will be inserted here -->
     </div>
-
-    </header><br/>
+</header><br/>
 <body>
     <!-- Navigation Bar -->
     <nav>
         <ul>
             <li><a href="index.html">Home</a></li>
             <li><a href="members.html">Members of Society</a></li>
-            <li><a href="events.html">Events</a></li>
-            <li><a href="awards.html">Awards</a></li>
-            <li><a href="review.html">Review</a></li>
-            <li><a href="memories.html">Memories</a></li>
-            <li><a href="about.html">About</a></li>
+            <li><a href="Events.html">Events</a></li>
+            <li><a href="Awards.html">Awards</a></li>
+            <li><a href="Review.html">Review</a></li>
+            <li><a href="Memories.html">Memories</a></li>
+            <li><a href="About.html">About</a></li>
             <li><a href="Route.html">Location</a></li>
         </ul>
     </nav>
@@ -50,6 +50,41 @@
         }
 
         window.onload = displayUserInfo;
+
+        // Function to handle image upload to backend and S3 bucket
+        function addMemory() {
+            const fileInput = document.getElementById('memory-image');
+            const file = fileInput.files[0];
+            if (!file) {
+                alert("Please select an image to upload!");
+                return;
+            }
+
+            // Prepare form data
+            const formData = new FormData();
+            formData.append('memory', file);
+
+            // Send POST request to the backend
+            fetch('http://52.66.80.124:5000/upload', {  // Make sure to change this URL to your EC2 or backend URL
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.imageUrl) {
+                    // Display the uploaded image in the gallery
+                    const gallery = document.getElementById('memories-gallery');
+                    gallery.innerHTML += `<img src="${data.imageUrl}" alt="Uploaded Memory" style="width: 200px; height: auto; margin: 10px;">`;
+                    alert('Memory uploaded successfully!');
+                } else {
+                    alert('Failed to upload memory');
+                }
+            })
+            .catch(error => {
+                console.error('Error uploading memory:', error);
+                alert('Failed to upload memory');
+            });
+        }
     </script>
 
     <!-- Memories Content -->
