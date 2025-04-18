@@ -1,113 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Memories - Numaish</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="scripts.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Memories - Numaish</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-<header>
+
+<body>
+  <!-- Header -->
+  <header>
     <center>
-        <a href=""><img src="logo.jpeg" width="200" height="200" alt="Logo"></a><br/>
-        <h1>ALL INDIA INDUSTRIAL EXHIBITION-NUMAISH</h1>
+      <a href="#"><img src="logo.jpeg" width="200" height="200" alt="Logo" /></a><br />
+      <h1>ALL INDIA INDUSTRIAL EXHIBITION - NUMAISH</h1>
     </center>
 
-    <div id="user-info" style="text-align: right; margin-right: 20px; font-weight: bold; color: #007bff;">
-        <!-- User info and logout button will be inserted here -->
+    <div id="user-info" style="text-align: right; margin-right: 20px; font-weight: bold; color: #007bff;"></div>
+  </header><br />
+
+  <!-- Navigation Bar -->
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="members.html">Members of Society</a></li>
+      <li><a href="Events.html">Events</a></li>
+      <li><a href="Awards.html">Awards</a></li>
+      <li><a href="Review.html">Review</a></li>
+      <li><a href="Memories.html">Memories</a></li>
+      <li><a href="About.html">About</a></li>
+      <li><a href="Route.html">Location</a></li>
+    </ul>
+  </nav>
+
+  <!-- Main Section -->
+  <section class="memories-section">
+    <h1>Memories of Numaish</h1>
+    <p>Share your memorable moments from the exhibition!</p>
+
+    <!-- Image Gallery -->
+    <div id="memories-gallery">
+      <p>No memories added yet. Be the first to share yours!</p>
     </div>
-</header><br/>
-<body>
-    <!-- Navigation Bar -->
-    <nav>
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="members.html">Members of Society</a></li>
-            <li><a href="Events.html">Events</a></li>
-            <li><a href="Awards.html">Awards</a></li>
-            <li><a href="Review.html">Review</a></li>
-            <li><a href="Memories.html">Memories</a></li>
-            <li><a href="About.html">About</a></li>
-            <li><a href="Route.html">Location</a></li>
-        </ul>
-    </nav>
 
-    <script>
-        function logout() {
-            localStorage.removeItem('username');
-            window.location.href = 'login.html';
+    <!-- Memory Submission Form -->
+    <div class="memory-form">
+      <h3>Add Your Memory</h3>
+      <input type="file" id="memory-image" accept="image/*" />
+      <button onclick="addMemory()">Add Memory</button>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2024 All India Industrial Exhibition - Numaish</p>
+  </footer>
+
+  <!-- Script -->
+  <script>
+    function logout() {
+      localStorage.removeItem('username');
+      window.location.href = 'login.html';
+    }
+
+    function displayUserInfo() {
+      const userInfoDiv = document.getElementById('user-info');
+      const username = localStorage.getItem('username');
+
+      if (username) {
+        userInfoDiv.innerHTML = "Welcome, " + username + " | <a href='#' onclick='logout()'>Logout</a>";
+      } else {
+        userInfoDiv.innerHTML = '';
+      }
+    }
+
+    window.onload = displayUserInfo;
+
+    function addMemory() {
+      const fileInput = document.getElementById('memory-image');
+      const file = fileInput.files[0];
+      if (!file) {
+        alert("Please select an image to upload!");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('memory', file); // Field name must match 'upload.single("memory")'
+
+      fetch('http://52.66.80.124:5000/upload', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.imageUrl) {
+          const gallery = document.getElementById('memories-gallery');
+
+          // If it's the first image, clear the "No memories" message
+          if (gallery.innerHTML.includes('No memories')) {
+            gallery.innerHTML = '';
+          }
+
+          // Append new image
+          gallery.innerHTML += `<img src="${data.imageUrl}" alt="Uploaded Memory" style="width: 200px; height: auto; margin: 10px; border-radius: 8px;">`;
+          alert('Memory uploaded successfully!');
+        } else {
+          alert('Failed to upload memory');
         }
-
-        function displayUserInfo() {
-            const userInfoDiv = document.getElementById('user-info');
-            const username = localStorage.getItem('username');
-
-            if (username) {
-                userInfoDiv.innerHTML = "Welcome, " + username + " | <a href='#' onclick='logout()'>Logout</a>";
-            } else {
-                userInfoDiv.innerHTML = '';
-            }
-        }
-
-        window.onload = displayUserInfo;
-
-        // Function to handle image upload to backend and S3 bucket
-        function addMemory() {
-            const fileInput = document.getElementById('memory-image');
-            const file = fileInput.files[0];
-            if (!file) {
-                alert("Please select an image to upload!");
-                return;
-            }
-
-            // Prepare form data
-            const formData = new FormData();
-            formData.append('memory', file);
-
-            // Send POST request to the backend
-            fetch('http://52.66.80.124:5000/upload', {  // Make sure to change this URL to your EC2 or backend URL
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.imageUrl) {
-                    // Display the uploaded image in the gallery
-                    const gallery = document.getElementById('memories-gallery');
-                    gallery.innerHTML += `<img src="${data.imageUrl}" alt="Uploaded Memory" style="width: 200px; height: auto; margin: 10px;">`;
-                    alert('Memory uploaded successfully!');
-                } else {
-                    alert('Failed to upload memory');
-                }
-            })
-            .catch(error => {
-                console.error('Error uploading memory:', error);
-                alert('Failed to upload memory');
-            });
-        }
-    </script>
-
-    <!-- Memories Content -->
-    <section class="memories-section">
-        <h1>Memories of Numaish</h1>
-        <p>Share your memorable moments from the exhibition!</p>
-
-        <!-- Image Gallery -->
-        <div id="memories-gallery">
-            <p>No memories added yet. Be the first to share yours!</p>
-        </div>
-
-        <!-- Memory Submission -->
-        <div class="memory-form">
-            <h3>Add Your Memory</h3>
-            <input type="file" id="memory-image" accept="image/*">
-            <button onclick="addMemory()">Add Memory</button>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2024 All India Industrial Exhibition - Numaish</p>
-    </footer>
+      })
+      .catch(error => {
+        console.error('Error uploading memory:', error);
+        alert('Failed to upload memory');
+      });
+    }
+  </script>
 </body>
 </html>
